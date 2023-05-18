@@ -5,6 +5,7 @@ description = "A simple GUI for viewing waveforms."
 authors = ["Jiahao Yuan <kaho0769@qq.com>"]
 license = "MIT"
 readme = "README.md"
+repository = "https://github.com/kahojyun/wave-viewer"
 packages = [{include = "wave_viewer"}]
 
 [tool.poetry.dependencies]
