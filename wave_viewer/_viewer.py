@@ -8,7 +8,7 @@ from multiprocessing.connection import Connection
 import numpy as np
 from PySide6.QtCore import QObject, Qt, QThread, Signal, Slot
 from PySide6.QtWidgets import QMainWindow
-from vispy import app, scene
+from vispy import scene
 from vispy.app import use_app
 
 
@@ -191,12 +191,3 @@ def main(rconn: Connection):
     thread.start()
     app.run()
     thread.wait(5000)
-
-
-if __name__ == "__main__":
-    app = use_app("PySide6")
-    app.create()
-    canvas_wrapper = CanvasWrapper()
-    win = WaveViewerWindow(canvas_wrapper)
-    win.show()
-    app.run()

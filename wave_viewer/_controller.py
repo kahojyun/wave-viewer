@@ -15,11 +15,21 @@ class WaveViewer:
 
     It plots the waveform with vispy in a separate process. The GUI is built with
     PySide6.
+
+
+    Parameters
+    ----------
+    daemon : bool, optional
+        If True, the viewer process is a daemon process. This means that the
+        process will be terminated when the main process exits. If False, the
+        viewer process will continue to run after the main process exits. In this
+        case, the viewer process must be closed manually by calling the `close`
+        method. The default is True.
     """
 
-    def __init__(self) -> None:
+    def __init__(self, daemon: bool = True) -> None:
         self._rconn, self._wconn = mp.Pipe(duplex=False)
-        self._process = mp.Process(target=main, args=(self._rconn,))
+        self._process = mp.Process(target=main, args=(self._rconn,), daemon=daemon)
         self._process.start()
 
     def _ensure_open(self) -> None:
@@ -30,7 +40,8 @@ class WaveViewer:
         """Add a line to the plot.
 
         The method accepts a list of y values and plots them against the time axis.
-        The y values are plotted with different colors.
+        The y values are plotted with different colors. The name will also be added
+        to the right of the line.
 
         If a line with the same name already exists, it is replaced.
 
@@ -138,3 +149,7 @@ class WaveViewer:
         self._process.join()
         self._wconn.close()
         self._rconn.close()
+
+    def wait(self) -> None:
+        """Wait for the WaveViewer to close."""
+        self._process.join()
