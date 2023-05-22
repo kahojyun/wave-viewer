@@ -9,11 +9,18 @@ repository = "https://github.com/kahojyun/wave-viewer"
 packages = [{include = "wave_viewer"}]
 
 [tool.poetry.dependencies]
-python = ">=3.8,<3.12"
+python = ">=3.7,<3.12"
 vispy = "^0.13.0"
 pyside6 = "^6.5.0"
+importlib-metadata = {version = ">=1.0", python = "<3.8"}
 
+
+[tool.poetry.group.dev.dependencies]
+python-semantic-release = "^7.33.5"
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.semantic_release]
+version_variable = "pyproject.toml:version"
