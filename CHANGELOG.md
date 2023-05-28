@@ -2,6 +2,11 @@
 
 <!--next-version-placeholder-->
 
+## v0.2.1 (2023-05-28)
+### Performance
+* :zap: imporve `add_line` performance ([`f357941`](https://github.com/kahojyun/wave-viewer/commit/f3579411258312b61fdf3296fd65cf623864507d))
+* :zap: use `Queue` instead of `Pipe` for IPC ([`68705c4`](https://github.com/kahojyun/wave-viewer/commit/68705c4c3e5652e8a43f1cd67d10acfadc2077aa))
+
 ## v0.2.0 (2023-05-23)
 ### Feature
 * :sparkles: viewer quits automatically when main process quits ([`90fd460`](https://github.com/kahojyun/wave-viewer/commit/90fd46095806d1cd3f699eedce0698ecb961e853))
