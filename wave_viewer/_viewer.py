@@ -3,7 +3,8 @@ PySide6 viewer wrapping vispy canvas. This is a separate process from the
 controller to avoid blocking the main thread.
 """
 
-from multiprocessing.connection import Connection
+from multiprocessing import Queue
+from queue import Empty
 
 import numpy as np
 from PySide6.QtCore import QObject, Qt, QThread, Signal, Slot
@@ -142,7 +143,7 @@ class DataSource(QObject):
     autoscale = Signal()
     finished = Signal()
 
-    def __init__(self, conn: Connection) -> None:
+    def __init__(self, conn: Queue) -> None:
         super().__init__()
         self.conn = conn
         self._should_stop = False
@@ -150,9 +151,9 @@ class DataSource(QObject):
     @Slot()
     def run(self):
         while not self._should_stop:
-            if self.conn.poll(0.1):
-                msg = self.conn.recv()
-            else:
+            try:
+                msg = self.conn.get(True, 0.1)
+            except Empty:
                 continue
             if msg["type"] == "add_line":
                 self.add_line.emit(msg["name"], msg["t"], msg["ys"], msg["offset"])
@@ -171,7 +172,7 @@ class DataSource(QObject):
         self._should_stop = True
 
 
-def main(rconn: Connection):
+def main(rconn: Queue):
     app = use_app("PySide6")
     app.create()
     canvas_wrapper = CanvasWrapper()

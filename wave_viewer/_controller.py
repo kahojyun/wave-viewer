@@ -28,8 +28,8 @@ class WaveViewer:
     """
 
     def __init__(self, daemon: bool = True) -> None:
-        self._rconn, self._wconn = mp.Pipe(duplex=False)
-        self._process = mp.Process(target=main, args=(self._rconn,), daemon=daemon)
+        self._conn = mp.Queue()
+        self._process = mp.Process(target=main, args=(self._conn,), daemon=daemon)
         self._process.start()
 
     def _ensure_open(self) -> None:
@@ -96,7 +96,7 @@ class WaveViewer:
             "ys": ys,
             "offset": offset,
         }
-        self._wconn.send(msg)
+        self._conn.put(msg)
 
     def remove_line(self, name: str) -> None:
         """Remove a line from the plot.
@@ -117,7 +117,7 @@ class WaveViewer:
         if not isinstance(name, str):
             raise TypeError("name must be a string")
         msg = {"type": "remove_line", "name": name}
-        self._wconn.send(msg)
+        self._conn.put(msg)
 
     def clear(self) -> None:
         """Clear the plot.
@@ -129,7 +129,7 @@ class WaveViewer:
         """
         self._ensure_open()
         msg = {"type": "clear"}
-        self._wconn.send(msg)
+        self._conn.put(msg)
 
     def autoscale(self) -> None:
         """Autoscale the plot.
@@ -141,14 +141,13 @@ class WaveViewer:
         """
         self._ensure_open()
         msg = {"type": "autoscale"}
-        self._wconn.send(msg)
+        self._conn.put(msg)
 
     def close(self) -> None:
         """Close the WaveViewer."""
         self._process.terminate()
         self._process.join()
-        self._wconn.close()
-        self._rconn.close()
+        self._conn.close()
 
     def wait(self) -> None:
         """Wait for the WaveViewer to close."""
