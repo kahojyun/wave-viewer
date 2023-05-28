@@ -37,7 +37,7 @@ class WaveViewer:
             raise RuntimeError("WaveViewer is closed")
 
     def add_line(self, name: str, t: np.ndarray, ys: list, offset: float) -> None:
-        """Add a line to the plot.
+        """Add a line to the plot or update an existing line.
 
         The method accepts a list of y values and plots them against the time axis.
         The y values are plotted with different colors. The name will also be added
@@ -121,6 +121,11 @@ class WaveViewer:
 
     def clear(self) -> None:
         """Clear the plot.
+
+        Caution
+        -------
+        Lag may occur if the plot is cleared too frequently. You don't need to
+        clear the plot if you are updating the same lines.
 
         Raises
         ------

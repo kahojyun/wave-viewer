@@ -20,8 +20,30 @@ class CanvasWrapper:
 
     @Slot(str, np.ndarray, list, float)
     def add_line(self, name, t, ys, offset):
-        self.remove_line(name)
         colors = ["r", "b", "g"]
+        if name in self.lines:
+            old_line = self.lines[name]["line"]
+            new_line = []
+            for y, color, line in zip(ys, colors, old_line):
+                line.set_data(np.column_stack((t, y + offset)), color=color)
+                new_line.append(line)
+            if len(ys) < len(old_line):
+                for line in old_line[len(ys) :]:
+                    line.parent = None
+            if len(ys) > len(old_line):
+                for y, color in zip(ys[len(old_line) :], colors[len(old_line) :]):
+                    new_line.append(
+                        scene.Line(
+                            np.column_stack((t, y + offset)),
+                            color=color,
+                            parent=self.view.scene,
+                        )
+                    )
+            self.lines[name]["line"] = new_line
+            self.lines[name]["text"].pos = (t[-1], offset)
+            self.lines[name]["t_range"] = (t[0], t[-1])
+            self.lines[name]["y_range"] = (np.min(ys) + offset, np.max(ys) + offset)
+            return
         self.lines[name] = {
             "line": [
                 scene.Line(

@@ -15,36 +15,43 @@ pip install wave-viewer
 
 ## Usage
 
+Below is a simple example of how to use the `WaveViewer` class. Avoid calling
+`clear` if you only want to update the plot. It is more efficient to update the
+plot with `add_line`.
+
 ```python
 from wave_viewer import WaveViewer
 import numpy as np
 
-# Create the viewer
-viewer = WaveViewer()
 
-# Add a line to the plot
-x = np.arange(100000) / 2e9
-y = np.exp(1j * 2 * np.pi * 1e6 * x)
-ys = [y.real, y.imag]
-viewer.add_line("line1", x, ys, offset=0)
+# This if statement is required for multiprocessing on Windows
+if __name__ == "__main__":
+    # Create the viewer
+    viewer = WaveViewer()
 
-# Add another line to the plot
-viewer.add_line("line2", x, ys, offset=2)
+    # Add a line to the plot
+    x = np.arange(100000) / 2e9
+    y = np.exp(1j * 2 * np.pi * 1e6 * x)
+    ys = [y.real, y.imag]
+    viewer.add_line("line1", x, ys, offset=0)
 
-# Auto scale the plot
-viewer.autoscale()
+    # Add another line to the plot
+    viewer.add_line("line2", x, ys, offset=2)
 
-# Remove the first line
-viewer.remove_line("line1")
+    # Auto scale the plot
+    viewer.autoscale()
 
-# Replace the second line
-y = np.exp(1j * 2 * np.pi * 2e6 * x)
-ys = [y.real, y.imag]
-viewer.add_line("line2", x, ys, offset=2)
+    # Remove the first line
+    viewer.remove_line("line1")
 
-# Clear the plot
-viewer.clear()
+    # Replace the second line
+    y = np.exp(1j * 2 * np.pi * 2e6 * x)
+    ys = [y.real, y.imag]
+    viewer.add_line("line2", x, ys, offset=2)
 
-# Close the GUI
-viewer.close()
+    # Clear the plot
+    viewer.clear()
+
+    # Close the GUI
+    viewer.close()
 ```
