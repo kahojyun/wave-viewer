@@ -7,7 +7,12 @@ import multiprocessing as mp
 
 import numpy as np
 
-from ._viewer import main
+
+def _entrypoint(rconn: mp.Queue):
+    """Entry point for the wave_viewer process."""
+    from ._viewer import main
+
+    main(rconn)
 
 
 class WaveViewer:
@@ -29,7 +34,9 @@ class WaveViewer:
 
     def __init__(self, daemon: bool = True) -> None:
         self._conn = mp.Queue()
-        self._process = mp.Process(target=main, args=(self._conn,), daemon=daemon)
+        self._process = mp.Process(
+            target=_entrypoint, args=(self._conn,), daemon=daemon
+        )
         self._process.start()
 
     def _ensure_open(self) -> None:
