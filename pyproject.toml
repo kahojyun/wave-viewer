@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "wave-viewer"
-version = "0.2.1"
+version = "0.2.2"
 description = "A simple GUI for viewing waveforms."
 authors = ["Jiahao Yuan <kaho0769@qq.com>"]
 license = "MIT"

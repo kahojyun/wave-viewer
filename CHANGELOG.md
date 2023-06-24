@@ -2,6 +2,12 @@
 
 <!--next-version-placeholder-->
 
+## v0.2.2 (2023-06-24)
+
+### Fix
+
+* :bug: avoid importing viewer in main process ([`8e88303`](https://github.com/kahojyun/wave-viewer/commit/8e883039e3dc74439548f3a33eb9fa8af852fefd))
+
 ## v0.2.1 (2023-05-28)
 ### Performance
 * :zap: imporve `add_line` performance ([`f357941`](https://github.com/kahojyun/wave-viewer/commit/f3579411258312b61fdf3296fd65cf623864507d))
