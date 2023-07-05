@@ -9,12 +9,8 @@ The `WaveViewer` class is the main interface for the wave_viewer package. It
 provides methods for adding and removing lines from the plot, clearing the plot,
 and closing the GUI.
 """
-import sys
 
-if sys.version_info >= (3, 8):
-    from importlib import metadata
-else:
-    import importlib_metadata as metadata
+from importlib import metadata
 
 from ._controller import WaveViewer
 
